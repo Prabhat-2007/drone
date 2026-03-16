@@ -6,17 +6,14 @@ class AltitudeNode(Node):
     def __init__(self):
         super().__init__('altitude_controller')
         
-        # Publisher: Sends data to /drone_altitude
         self.altitude_pub = self.create_publisher(Float64, 'drone_altitude', 10)
         
-        # Subscriber: Listens to /target_altitude
         self.target_sub = self.create_subscription(
             Float64, 
             'target_altitude', 
             self.target_callback, 
             10)
         
-        # Timer to simulate altitude changes (10Hz)
         self.timer = self.create_timer(0.1, self.publish_altitude)
         
         self.current_alt = 0.0
