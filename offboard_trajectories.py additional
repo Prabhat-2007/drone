@@ -1,0 +1,18 @@
+class OffboardTrajectories(Node):
+    def __init__(self, drone_ns='drone1'):
+        # Pass the namespace to the Node constructor
+        super().__init__('trajectory_node', namespace=drone_ns)
+
+        qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1
+        )
+
+        # The topics will now automatically prepend the namespace
+        self.status_sub = self.create_subscription(
+            VehicleStatus, 
+            'fmu/out/vehicle_status_v1', # No leading slash
+            self.status_callback, 
+            qos_profile)
